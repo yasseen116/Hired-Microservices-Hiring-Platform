@@ -10,7 +10,7 @@ Landing page with featured jobs and navigation.
 - Hero with call-to-action
 - Quick access to browse and auth
 
-![Home page](static/images/website-screenshots/home-page.png)
+![Home page](hired-front-end/static/images/website-screenshots/home-page.png)
 
 ### Browse Jobs
 Job discovery with listings and filters.
@@ -18,7 +18,7 @@ Job discovery with listings and filters.
 - Search/browse cards
 - Location/category cues
 
-![Browse jobs](static/images/website-screenshots/browse-jobs.png)
+![Browse jobs](hired-front-end/static/images/website-screenshots/browse-jobs.png)
 
 ### Job Details
 Full job description and apply entry point.
@@ -26,7 +26,7 @@ Full job description and apply entry point.
 - Role/company summary
 - Requirements and actions
 
-![Job details](static/images/website-screenshots/job-details.png)
+![Job details](hired-front-end/static/images/website-screenshots/job-details.png)
 
 ---
 
@@ -35,7 +35,7 @@ Full job description and apply entry point.
 ### Login
 Single-step login for seekers and providers.
 
-![Login](static/images/website-screenshots/login.png)
+![Login](hired-front-end/static/images/website-screenshots/login.png)
 
 ### Sign Up
 Choose seeker or provider path.
@@ -44,11 +44,11 @@ Choose seeker or provider path.
   <tr>
     <td width="50%">
       <strong>Job Seeker</strong><br>
-      <img src="static/images/website-screenshots/sign-up(job-seeker).png" alt="Sign up job seeker">
+      <img src="hired-front-end/static/images/website-screenshots/sign-up(job-seeker).png" alt="Sign up job seeker">
     </td>
     <td width="50%">
       <strong>Job Provider</strong><br>
-      <img src="static/images/website-screenshots/sign-up(job-provider).png" alt="Sign up job provider">
+      <img src="hired-front-end/static/images/website-screenshots/sign-up(job-provider).png" alt="Sign up job provider">
     </td>
   </tr>
 </table>
@@ -67,11 +67,11 @@ Manage saved jobs.
   <tr>
     <td width="50%">
       <strong>Empty Wishlist</strong><br>
-      <img src="static/images/website-screenshots/empty-wishlist.png" alt="Empty wishlist">
+      <img src="hired-front-end/static/images/website-screenshots/empty-wishlist.png" alt="Empty wishlist">
     </td>
     <td width="50%">
       <strong>Wishlist</strong><br>
-      <img src="static/images/website-screenshots/wishlist.png" alt="Wishlist">
+      <img src="hired-front-end/static/images/website-screenshots/wishlist.png" alt="Wishlist">
     </td>
   </tr>
 </table>
@@ -79,7 +79,7 @@ Manage saved jobs.
 ### Apply for Job
 Modal flow to submit an application.
 
-![Apply modal](static/images/website-screenshots/apply-modal.png)
+![Apply modal](hired-front-end/static/images/website-screenshots/apply-modal.png)
 
 ---
 
@@ -88,12 +88,12 @@ Modal flow to submit an application.
 ### Profile
 Personal info, skills, and activity.
 
-![Profile](static/images/website-screenshots/profile.png)
+![Profile](hired-front-end/static/images/website-screenshots/profile.png)
 
 ### Profile – Applied Job Accepted
 Status view for accepted applications.
 
-![Profile with accepted application](static/images/website-screenshots/profile-appliedjob(accepted).png)
+![Profile with accepted application](hired-front-end/static/images/website-screenshots/profile-appliedjob(accepted).png)
 
 ---
 
@@ -104,26 +104,26 @@ Comprehensive tools for job providers.
 ### Post a Job
 Create a new listing.
 
-![Post a job](static/images/website-screenshots/provider-dashboard(post-a-job).png)
+![Post a job](hired-front-end/static/images/website-screenshots/provider-dashboard(post-a-job).png)
 
 ### Manage Jobs
 Oversee published roles.
 
-![Manage jobs](static/images/website-screenshots/provider-dashboard(manage-jobs).png)
+![Manage jobs](hired-front-end/static/images/website-screenshots/provider-dashboard(manage-jobs).png)
 
 ### Applications
 Review applicants per role.
 
-![Applications](static/images/website-screenshots/provider-dashboard(applications).png)
+![Applications](hired-front-end/static/images/website-screenshots/provider-dashboard(applications).png)
 
 ### Application Accepted
 Track accepted candidates.
 
-![Application accepted](static/images/website-screenshots/provider-dashboard(application-accepted).png)
+![Application accepted](hired-front-end/static/images/website-screenshots/provider-dashboard(application-accepted).png)
 
 ---
 
 ## About Us
 Team/mission overview.
 
-![About us](static/images/website-screenshots/about-us.png)
+![About us](hired-front-end/static/images/website-screenshots/about-us.png)
