@@ -1,0 +1,197 @@
+{% extends "_base.html" %}
+
+{% block title %}Hired{% endblock %}
+
+{% block content %}
+    <header class="hero-section">
+        <div class="container hero-layout">
+            <div class="hero-text">
+                <h1>Welcome to <span class="logo hero-logo">Hired</span></h1>
+                <p class="subtitle">Your path to real job opportunities starts here.</p>
+                
+                <div class="hero-description">
+                    <p>– Hired helps you find real jobs that match your skills and career goals.</p>
+                    <p>– Apply easily, track applications, and connect with trusted companies all in one place</p>
+                </div>
+
+                <ul class="hero-features">
+                    <li>Browse real and verified job listings</li>
+                    <li>Apply with one click</li>
+                    <li>Track your application progress</li>
+                </ul>
+
+                <a href="signup.html" class="btn btn-primary btn-large">
+                    Get Started
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 8px; vertical-align: middle;">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+            <div class="hero-image">
+                <img src="../static/images/hero-image.jpg" alt="Hero Image">
+            </div>
+        </div>
+    </header>
+    <section class="featured-jobs-section" id="jobs-anchor">
+        <div class="container">
+            <h2 class="section-title">Featured Jobs</h2>
+
+            <div v-if="isLoading" style="text-align: center; padding: 40px;">
+                <p>Loading opportunities...</p>
+            </div>
+
+            <div v-if="error" style="color: red; text-align: center;">
+                <p>[[ error ]]</p>
+            </div>
+
+            <div class="jobs-grid" v-if="!isLoading">
+                
+                <div class="job-card" v-for="job in filteredJobs.slice(0, 8)" :key="job.id">
+    
+                    <h3 class="job-title">[[ job.title ]]</h3>
+                    
+                    <div class="job-card-logo">
+                        <img v-if="job.logoUrl" :src="job.logoUrl" :alt="job.company">
+                        <div v-else style="font-weight:bold; color:#555;">[[ job.company ]]</div>
+                    </div>
+
+                    <div class="job-details">
+                        <p>Company : <span class="highlight-red">[[ job.company ]]</span></p>
+                        <p>Location : <span class="highlight-red">[[ job.location ]]</span></p>
+                        <p>Experience : <span class="highlight-red">[[ job.experience ]]</span></p>
+                        <p>Salary : <span class="highlight-red">[[ job.salary ]]</span></p>
+                        <p>Job Type : <span class="highlight-red">[[ job.type ]]</span></p>
+                    </div>
+
+                    <div class="card-actions">
+                        <button class="btn btn-card-apply" @click="openApplyModal(job)">Apply</button>
+                        <button class="btn btn-card-details" @click="showJobDetails(job)">Details</button>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="view-all-container">
+                <a href="browse-jobs.html" class="btn btn-view-all">View All Jobs</a>
+            </div>
+
+        </div>
+    </section>
+    <section class="companies-section">
+        <div class="container">
+            
+            <h2 class="section-title">Join Egypt's Top Companies</h2>
+
+            <div class="slider-wrapper">
+                
+                <button class="arrow-btn prev" @click="scrollCompanies('left')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 18l-6-6 6-6"/>
+                    </svg>
+                </button>
+
+                <div class="companies-grid">
+                    <div 
+                        v-for="(company, index) in companies" 
+                        :key="index" 
+                        class="company-box">
+                        
+                        <img :src="company.logo" :alt="company.name" class="company-logo">
+                    
+                    </div>
+                </div>
+
+                <button class="arrow-btn next" @click="scrollCompanies('right')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"/>
+                    </svg>
+                </button>
+
+            </div>
+
+        </div>
+    </section>
+    <transition name="modal-fade">
+        <div class="modal-overlay" v-if="showApplyModal" @click.self="closeModal">
+            <div class="modal-card">
+            
+            <div class="modal-header">
+                <h3>Apply for : <span style="color: var(--primary-color);">[[ selectedJobForApp?.title ]]</span></h3>
+                <button class="btn-close-modal" @click="closeModal">&times;</button>
+            </div>
+
+            <div class="modal-company-branding">
+                <img v-if="selectedJobForApp?.logoUrl" 
+                    :src="selectedJobForApp.logoUrl" 
+                    :alt="selectedJobForApp.company" 
+                    class="modal-company-logo">
+                
+                <div v-else class="modal-company-text-logo">
+                    [[ selectedJobForApp?.company ]]
+                </div>
+                <p class="modal-company-name">at <span style="color: var(--primary-color);">[[ selectedJobForApp?.company ]]</span></p>
+            </div>
+
+            <div class="modal-body">
+                
+                <div class="modal-section">
+                    <div style="font-size: 3rem; color: var(--primary-color); margin-bottom: 15px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    </div>
+                    <h4>Use Existing CV</h4>
+                    <p>Apply instantly using the CV you uploaded when you signed up.</p>
+                    <button class="btn btn-primary" @click="applyWithExisting">
+                        Apply with Existing CV
+                    </button>
+                </div>
+
+                <div class="vertical-divider"></div>
+
+                <div class="modal-section">
+                    <div style="font-size: 3rem; color: var(--primary-color); margin-bottom: 15px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                    </div>
+                    <h4>Upload New CV</h4>
+                    <p>Upload a specific CV tailored for this job application.</p>
+                    
+                    <div class="modal-upload-label">
+                        <input type="file" id="newCv" @change="handleCvUpload" accept=".pdf,.doc,.docx" style="display: none;">
+                        <label for="newCv" class="custom-file-upload" :class="{ 'has-file': newCvName }">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                            <span>[[ newCvName || 'Choose File...' ]]</span>
+                        </label>
+                    </div>
+
+                    <button class="btn" 
+                            :class="newCvName ? 'btn-login-action' : 'btn-card-details'" 
+                            :disabled="!newCvName"
+                            @click="applyWithNew">
+                        Confirm & Apply
+                    </button>
+                </div>
+
+            </div>
+            </div>
+        </div>
+    </transition>
+    <div v-if="showLoginNotification" class="toast-notification">
+        <div class="toast-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <style>.toast-icon svg { transform: rotate(45deg); }</style> 
+        </div>
+        <span>You need to be logged in to apply!</span>
+    </div>
+    <div v-if="showSuccessNotification" class="toast-notification success">
+        <div class="toast-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <span>[[ successMessage ]]</span>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script src="../static/js/model.js"></script>
+    <script src="../static/js/main.js"></script>
+{% endblock %}

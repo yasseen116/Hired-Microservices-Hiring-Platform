@@ -1,0 +1,68 @@
+{% extends "_base.html" %}
+
+{% block title %}Login - Hired{% endblock %}
+
+{% block content %}
+<div class="auth-section" id="app">
+    <div class="container auth-container">
+        
+        <div class="auth-card">
+            
+            <div class="auth-header">
+                <h2 class="auth-title">Welcome Back</h2>
+                <p class="auth-subtitle">Login to manage your professional profile</p>
+            </div>
+
+            <form @submit.prevent="handleLogin" class="auth-form">
+    
+                <div v-if="errorMessage" style="color: red; margin-bottom: 15px; font-size: 0.9rem;">
+                    [[ errorMessage ]]
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        v-model="email" 
+                        placeholder="name@company.com" 
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        v-model="password" 
+                        placeholder="••••••••" 
+                        required
+                    >
+                </div>
+
+                <div class="form-actions">
+                    <label class="checkbox-label">
+                        <input type="checkbox" v-model="rememberMe"> Remember me
+                    </label>
+                    <a href="#" class="forgot-link">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn btn-login-action" :disabled="isLoading">
+                    <span v-if="isLoading">Signing in...</span>
+                    <span v-else>Sign In</span>
+                </button>
+
+            </form>
+
+            <div class="auth-footer">
+                <p>Don't have an account? <a href="signup.html">Create one</a></p>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+    <script src="../static/js/login.js"></script>
+{% endblock %}

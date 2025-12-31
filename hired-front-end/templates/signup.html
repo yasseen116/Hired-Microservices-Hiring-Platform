@@ -1,0 +1,80 @@
+{% extends "_base.html" %}
+
+{% block title %}Sign Up - Hired{% endblock %}
+
+{% block content %}
+<div class="auth-section" id="app">
+    <div class="container auth-container">
+
+        <div class="auth-card">
+
+            <div class="auth-header">
+                <h2 class="auth-title">Create Account</h2>
+                <p class="auth-subtitle">Join Hired as a Job Seeker or Provider</p>
+            </div>
+
+            <!-- Role Selection Tabs -->
+            <div class="dashboard-tabs"
+                style="justify-content: center; margin-bottom: 25px; border-bottom: 1px solid #eee;">
+                <button class="tab-btn" :class="{ active: role === 'seeker' }" @click="role = 'seeker'">
+                    Job Seeker
+                </button>
+                <button class="tab-btn" :class="{ active: role === 'provider' }" @click="role = 'provider'">
+                    Job Provider
+                </button>
+            </div>
+
+            <form @submit.prevent="handleSignup" class="auth-form">
+
+                <div v-if="errorMessage" style="color: red; margin-bottom: 15px; font-size: 0.9rem;">
+                    [[ errorMessage ]]
+                </div>
+
+                <div class="form-group">
+                    <label for="fullname">Full Name</label>
+                    <input type="text" id="fullname" v-model="fullname" placeholder="John Doe" required>
+                </div>
+
+                <!-- Company Name - Only for providers -->
+                <div class="form-group" v-if="role === 'provider'">
+                    <label for="companyName">Company Name</label>
+                    <input type="text" id="companyName" v-model="companyName" placeholder="e.g. Tech Solutions Inc."
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" v-model="email" placeholder="name@company.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" v-model="password" placeholder="••••••••" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" v-model="confirmPassword" placeholder="••••••••"
+                        required>
+                </div>
+
+                <button type="submit" class="btn btn-login-action" :disabled="isLoading">
+                    <span v-if="isLoading">Creating account...</span>
+                    <span v-else>Create Account</span>
+                </button>
+
+            </form>
+
+            <div class="auth-footer">
+                <p>Already have an account? <a href="/login">Sign In</a></p>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="../static/js/model.js"></script>
+<script src="../static/js/signup.js"></script>
+{% endblock %}

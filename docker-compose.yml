@@ -1,0 +1,62 @@
+version: '3.3'
+
+services:
+  frontend:
+    build: ./hired-front-end
+    container_name: hired-frontend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - job-service
+      - auth-service
+      - application-service
+    networks:
+      - hired-network
+
+  job-service:
+    build: ./job-service/jobs-service
+    container_name: job-service
+    expose:
+      - "8000"
+    volumes:
+      - job-data:/app/uploads
+      - job-db:/app/data
+    networks:
+      - hired-network
+
+  auth-service:
+    build: ./auth-service/auth-service
+    container_name: auth-service
+    expose:
+      - "8002"
+    volumes:
+      - auth-data:/app/uploads
+      - auth-db:/app/data
+    networks:
+      - hired-network
+
+  application-service:
+    build: ./omar-application-service
+    container_name: application-service
+    expose:
+      - "8003"
+    volumes:
+      - app-data:/app/uploads
+      - app-db:/app/data
+    depends_on:
+      - auth-service
+      - job-service
+    networks:
+      - hired-network
+
+networks:
+  hired-network:
+    driver: bridge
+
+volumes:
+  job-data:
+  job-db:
+  auth-data:
+  auth-db:
+  app-data:
+  app-db:

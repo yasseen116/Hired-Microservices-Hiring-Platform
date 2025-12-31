@@ -1,0 +1,120 @@
+{% extends "_base.html" %}
+
+{% block title %}Sign Up - Hired{% endblock %}
+
+{% block content %}
+<div class="auth-section" id="app">
+    <div class="container auth-container">
+        
+        <div class="auth-card">
+            
+            <div class="auth-header">
+                <h2 class="auth-title">Create Account</h2>
+                <p class="auth-subtitle">Join Hired to boost your career today</p>
+            </div>
+
+            <form @submit.prevent="handleSignup" class="auth-form">
+    
+                <div v-if="errorMessage" style="color: red; margin-bottom: 15px; font-size: 0.9rem; font-family: Poppins, sans-serif;">
+                    [[ errorMessage ]]
+                </div>
+
+                <div class="form-group">
+                    <label for="fullname">Full Name</label>
+                    <input type="text" id="fullname" v-model="fullname" placeholder="John Doe" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="jobTitle">Job Title</label>
+                    <input type="text" id="jobTitle" v-model="jobTitle" placeholder="e.g. Software Engineer" required>
+                </div>
+
+                <div class="form-group" style="position: relative;">
+                    <label>Skills</label>
+                    
+                    <transition-group name="skill-list" tag="div">
+                        
+                        <div v-for="(skill, index) in skills" :key="skill.id" class="skill-row">
+                            
+                            <input 
+                                type="text" 
+                                v-model="skill.value" 
+                                placeholder="e.g. Python" 
+                                required
+                            >
+                            
+                            <button 
+                                v-if="skills.length > 1" 
+                                type="button" 
+                                class="btn-icon btn-remove-skill" 
+                                @click="removeSkill(index)"
+                            >
+                                &times;
+                            </button>
+                            
+                            <button 
+                                v-if="index === skills.length - 1" 
+                                type="button" 
+                                class="btn-icon btn-add" 
+                                @click="addSkill"
+                            >
+                                +
+                            </button>
+                        </div>
+
+                    </transition-group>
+                </div>
+
+                <div class="form-group">
+                    <label>Upload CV</label>
+                    
+                    <input 
+                        type="file" 
+                        id="cv" 
+                        @change="handleFileUpload" 
+                        accept=".pdf,.doc,.docx"
+                        style="display: none;" 
+                        required
+                    >
+
+                    <label for="cv" class="custom-file-upload">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        
+                        <span>[[ fileName || 'Choose a PDF or Word file...' ]]</span>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" v-model="email" placeholder="name@company.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" v-model="password" placeholder="Create a password" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" v-model="confirmPassword" placeholder="Confirm your password" required>
+                </div>
+
+                <button type="submit" class="btn-login-action" :disabled="isLoading">
+                    <span v-if="isLoading">Creating account...</span>
+                    <span v-else>Sign Up</span>
+                </button>
+
+            </form>
+
+            <div class="auth-footer">
+                <p>Already have an account? <a href="login.html">Sign In</a></p>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="../static/js/signup.js"></script>
+{% endblock %}

@@ -1,0 +1,82 @@
+# ==============================================================================
+# AUTHENTICATION SERVICE DEPENDENCIES
+# ==============================================================================
+# This file lists all Python packages required by the Auth Service.
+#
+# To install all dependencies:
+#   pip install -r requirements.txt
+#
+# To create a virtual environment first (recommended):
+#   python -m venv venv
+#   source venv/bin/activate  (Linux/Mac)
+#   venv\Scripts\activate     (Windows)
+#   pip install -r requirements.txt
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# CORE WEB FRAMEWORK
+# ------------------------------------------------------------------------------
+# FastAPI - Modern, fast web framework for building APIs
+# - Automatic request/response validation
+# - Auto-generated OpenAPI documentation
+# - High performance (async support)
+fastapi==0.109.0
+
+# Uvicorn - ASGI server to run FastAPI applications
+# [standard] includes useful extras like uvloop for better performance
+uvicorn[standard]==0.27.0
+
+# ------------------------------------------------------------------------------
+# DATABASE
+# ------------------------------------------------------------------------------
+# SQLAlchemy - SQL toolkit and ORM (Object-Relational Mapping)
+# - Lets us work with databases using Python objects
+# - Handles connection pooling automatically
+sqlalchemy
+
+# ------------------------------------------------------------------------------
+# VALIDATION & SERIALIZATION
+# ------------------------------------------------------------------------------
+# Pydantic - Data validation using Python type hints
+# - Validates request/response data
+# - Auto-converts between types
+pydantic
+
+# Email validation for Pydantic
+# - Validates email format in signup/login
+email-validator
+
+# ------------------------------------------------------------------------------
+# FILE UPLOADS
+# ------------------------------------------------------------------------------
+# Python-multipart - Required for file uploads in FastAPI
+# - Handles multipart/form-data requests
+python-multipart
+
+# ------------------------------------------------------------------------------
+# AUTHENTICATION
+# ------------------------------------------------------------------------------
+# Python-Jose - JSON Web Token (JWT) library
+# [cryptography] provides the cryptographic backend
+# - Creates signed tokens for authentication
+# - Verifies tokens on protected routes
+python-jose[cryptography]
+
+# Passlib - Password hashing library
+# [bcrypt] provides bcrypt algorithm support
+# - Securely hashes passwords (one-way)
+# - Verifies passwords against stored hashes
+passlib[bcrypt]
+
+# Bcrypt - The actual bcrypt implementation
+# - Industry standard for password hashing
+# - Slow by design to prevent brute-force attacks
+bcrypt
+
+# ------------------------------------------------------------------------------
+# UTILITIES
+# ------------------------------------------------------------------------------
+# Python-dotenv - Load environment variables from .env files
+# - Keeps secrets out of code
+# - Easy configuration for different environments
+python-dotenv

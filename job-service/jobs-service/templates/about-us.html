@@ -1,0 +1,169 @@
+{% extends "_base.html" %}
+
+{% block title %}About Us - Hired{% endblock %}
+
+{% block content %}
+<div class="page about-page">
+    
+    <section class="about-hero">
+        <div class="container">
+            <h1>We Are <span class="logo about-hero-logo">Hired</span></h1>
+            <p class="subtitle">Bridging the gap between Egyptian talents and top employers.</p>
+        </div>
+    </section>
+
+    <section class="vision-section">
+        <div class="container">
+            <div class="vision-grid">
+                
+                <div class="vision-image">
+                    <div class="abstract-visual vision-rocket">
+                        <div class="rocket">
+                            <div class="rocket-body"></div>
+                            <div class="rocket-window"></div>
+                            <div class="rocket-flame flame1"></div>
+                            <div class="rocket-flame flame2"></div>
+                        </div>
+                        <div class="star star1"></div>
+                        <div class="star star2"></div>
+                        <div class="star star3"></div>
+                        <div class="star star4"></div>
+                        <div class="star star5"></div>
+                    </div>
+                </div>
+
+                <div class="vision-text">
+                    <h2>Our Vision</h2>
+                    <p>
+                        We see a future where the job market in Egypt is completely <strong>transparent, efficient, and skill-driven</strong>.
+                    </p>
+                    <p>
+                        Our goal is to become the <strong>#1 Digital Recruitment Infrastructure</strong> in the MENA region. We aim to replace outdated hiring methods with intelligent matching algorithms that empower every graduate to find their place and every company to build their dream team without the hassle.
+                    </p>
+                    
+                    <ul class="vision-list">
+                        <li><span>✔</span> Eliminate Application Fatigue</li>
+                        <li><span>✔</span> Standardize Hiring Processes</li>
+                        <li><span>✔</span> Bridge the Academic-Industry Gap</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="mission-section">
+        <div class="container">
+            <div class="mission-grid">
+                <div class="mission-text">
+                    <h2>Our Mission</h2>
+                    <p>
+                        The recruitment market in Egypt is fragmented. Opportunities are scattered across social media, outdated websites, and closed networks.
+                    </p>
+                    <p>
+                        <strong>Hired</strong> was born out of a simple idea: 
+                        To create a centralized, intelligent platform where job seekers can find opportunities that actually match their needs (like Remote/Hybrid options) and employers can reach the right candidates instantly.
+                    </p>
+                    <div class="stats-row">
+                        <div class="stat-box">
+                            <span class="stat-number">100+</span>
+                            <span class="stat-label">Listed Jobs</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-number">50+</span>
+                            <span class="stat-label">Top Companies</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-number">24/7</span>
+                            <span class="stat-label">Availability</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mission-image">
+                    <div class="abstract-visual mission-network">
+                        <div class="central-node"></div>
+                        <div class="node node1"></div>
+                        <div class="node node2"></div>
+                        <div class="node node3"></div>
+                        <div class="node node4"></div>
+                        <div class="node node5"></div>
+                        <svg class="network-lines" viewBox="0 0 300 300">
+                            <line class="connection" x1="150" y1="150" x2="150" y2="60"></line>
+                            <line class="connection" x1="150" y1="150" x2="240" y2="100"></line>
+                            <line class="connection" x1="150" y1="150" x2="240" y2="200"></line>
+                            <line class="connection" x1="150" y1="150" x2="150" y2="240"></line>
+                            <line class="connection" x1="150" y1="150" x2="60" y2="200"></line>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="team-section">
+        <div class="container">
+            <h2 class="section-title">Meet the Team</h2>
+            <p class="section-desc">Software Engineering Students @ SAMS</p>
+            
+            <div class="team-grid">
+                
+                <div class="team-card">
+                    <div class="member-avatar">
+                        <img src="../static/images/youssef-ahmed.png" onerror="this.onerror=null; this.src='../static/images/img-placeholder.png'" alt="Youssef Ahmed">
+                    </div>
+                    <h3>Youssef Ahmed</h3>
+                    <p class="role">Team Lead & Full Stack Dev</p>
+                    <p class="bio">Passionate about clean code, Vue.js, and Software Architecture.</p>
+                </div>
+
+                <div class="team-card">
+                    <div class="member-avatar">
+                        <img src="../static/images/ahmed-adel.jpg" onerror="this.onerror=null; this.src='../static/images/img-placeholder.png'" alt="Ahmed Adel">
+                    </div>
+                    <h3>Ahmed Adel</h3>
+                    <p class="role">Frontend Developer</p>
+                    <p class="bio">Focused on UI/UX design and responsive layouts.</p>
+                </div>
+
+                <div class="team-card">
+                    <div class="member-avatar">
+                        <img src="../static/images/beshoy-ayad.jpg" onerror="this.onerror=null; this.src='../static/images/img-placeholder.png'" alt="Beshoy Ayad">
+                    </div>
+                    <h3>Beshoy Ayad</h3>
+                    <p class="role">Requirements Engineer</p>
+                    <p class="bio">Specializes in documentation, UML diagrams, and analysis.</p>
+                </div>
+
+                <div class="team-card">
+                    <div class="member-avatar">
+                        <img src="../static/images/yasseen-mohamed.jpg" onerror="this.onerror=null; this.src='../static/images/img-placeholder.png'" alt="Yasseen Mohamed">
+                    </div>
+                    <h3>Yasseen Mohamed</h3>
+                    <p class="role">Backend Developer</p>
+                    <p class="bio">Handling database schemas and API logic.</p>
+                </div>
+
+                <div class="team-card">
+                    <div class="member-avatar">
+                        <img src="../static/images/omar-yosrii.jpg" onerror="this.onerror=null; this.src='../static/images/img-placeholder.png'" alt="Omar Yosrii">
+                    </div>
+                    <h3>Omar Yosrii</h3>
+                    <p class="role">Backend Developer</p>
+                    <p class="bio">Handling database schemas and API logic.</p>
+                </div>
+
+                <div class="team-card">
+                    <div class="member-avatar">
+                        <img src="../static/images/omar-seddiek.jpg" onerror="this.onerror=null; this.src='../static/images/img-placeholder.png'" alt="Omar Seddiek">
+                    </div>
+                    <h3>Omar Seddiek</h3>
+                    <p class="role">Backend Developer</p>
+                    <p class="bio">Handling database schemas and API logic.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</div>
+{% endblock %}

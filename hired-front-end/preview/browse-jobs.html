@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Jobs - Hired</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="../static/js/nav-control.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <a class="logo" href="index.html">Hired</a>
+
+        <div class="nav-content">
+            
+            <ul class="nav-links">
+                <li><a href="browse-jobs.html">Browse Jobs</a></li>
+                <li><a href="about-us.html">About Us</a></li>
+            </ul>
+
+            <div class="search-bar">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+
+                <input
+                    type="text"
+                    id="nav-search-input"
+                    placeholder="Search for a job..."
+                    onkeypress="handleNavSearch(event)"
+                >
+
+                <script>
+                    function handleNavSearch(event) {
+                        // Check if the key pressed is "Enter" (Key Code 13)
+                        if (event.key === 'Enter') {
+                            const query = document.getElementById('nav-search-input').value.trim();
+
+                            if (query) {
+                                // Redirect to browse-jobs.html with the search query
+                                // encodeURIComponent makes sure spaces/symbols don't break the URL
+                                window.location.href = `browse-jobs.html?search=${encodeURIComponent(query)}`;
+                            }
+                        }
+                    }
+                </script>
+            </div>
+
+            <div class="auth-buttons">
+    
+                <div id="guest-view" class="auth-row">
+                    <a href="login.html" class="btn btn-login">Login</a>
+                    <a href="signup.html" class="btn btn-signup">Sign Up</a>
+                </div>
+
+                <div id="user-view" class="auth-row user-row" style="display: none;">
+                    
+                    <a href="wishlist.html" class="nav-icon-circle" title="My Wishlist">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    </a>
+
+                    <a href="profile.html" class="nav-profile-link" title="Go to Profile">
+                        <div class="nav-icon-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        </div>
+                        <span class="user-greeting">Hi, User</span>
+                    </a>
+
+                    <button onclick="logout()" class="btn btn-logout">
+                        Logout
+                    </button>
+
+                </div>
+
+            </div>
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    // 1. GET USER FROM LOCAL STORAGE
+                    // Real logic: We check if there is a saved user object
+                    const userJson = localStorage.getItem('user');
+                    const isLoggedIn = userJson !== null; 
+
+                    // 2. GET HTML ELEMENTS
+                    const guestView = document.getElementById('guest-view');
+                    const userView = document.getElementById('user-view');
+                    const greeting = document.querySelector('.user-greeting');
+
+                    // 3. TOGGLE VIEWS
+                    if (isLoggedIn) {
+                        // -- LOGGED IN STATE --
+                        if(guestView) guestView.style.display = 'none';
+                        if(userView) userView.style.display = 'flex';
+                        
+                        // Optional: Update the name dynamically
+                        if (greeting) {
+                            const user = JSON.parse(userJson);
+                            greeting.textContent = "Hi, " + (user.name || "User");
+                        }
+                    } else {
+                        // -- GUEST STATE --
+                        if(guestView) guestView.style.display = 'flex';
+                        if(userView) userView.style.display = 'none';
+                    }
+                });
+
+                // 4. LOGOUT FUNCTION
+                // You can call this function to sign out
+                function logout() {
+                    localStorage.removeItem('user'); // Deletes the data
+                    window.location.href = 'login.html'; // Redirects to login
+                }
+            </script>
+        </div>
+    </nav>
+
+    <div id="app">
+        
+    <div class="page" id="app">
+        
+        <div class="browse-jobs">
+            <div class="container">
+                
+                <div v-if="isLoading" style="text-align: center; padding: 50px;">
+                    <p>Loading jobs...</p>
+                </div>
+
+                <div v-else-if="filteredJobs.length === 0" style="text-align: center; padding: 50px;">
+                    <p>No jobs found matching your criteria.</p>
+                </div>
+
+                <div class="all-jobs-grid" v-else>
+                    
+                    <div class="job-card" v-for="job in paginatedJobs" :key="job.id">
+
+                        <h3 class="job-title">[[ job.title ]]</h3>
+                        
+                        <div class="job-card-logo">
+                            <img v-if="job.logoUrl" :src="job.logoUrl" :alt="job.company">
+                            <div v-else style="font-weight:bold; color:#555;">[[ job.company ]]</div>
+                        </div>
+    
+                        <div class="job-details">
+                            <p>Company : <span class="highlight-red">[[ job.company ]]</span></p>
+                            <p>Location : <span class="highlight-red">[[ job.location ]]</span></p>
+                            <p>Experience : <span class="highlight-red">[[ job.experience ]]</span></p>
+                            <p>Salary : <span class="highlight-red">[[ job.salary ]]</span></p>
+                            <p>Job Type : <span class="highlight-red">[[ job.type ]]</span></p>
+                        </div>
+    
+                        <div class="card-actions">
+                            <button class="btn btn-card-apply" @click="openApplyModal(job)">Apply</button>
+                            <button class="btn btn-card-details" @click="goToDetails(job.id)">Details</button>
+                        </div>
+    
+                    </div>
+
+                </div>
+
+                <!-- Pagination controls -->
+                <div v-if="filteredJobs.length > 0" class="pagination" style="display:flex; gap:10px; align-items:center; justify-content:center; margin: 20px 0 40px;">
+                    <button class="btn btn-card-details" :style="page === 1 ? 'visibility:hidden;' : ''" @click="prevPage">Previous</button>
+                    <span>Page [[ page ]] of [[ totalPages ]]</span>
+                    <button class="btn btn-card-details" :style="page === totalPages ? 'visibility:hidden;' : ''" @click="nextPage">Next</button>
+                </div>
+            </div>        
+        </div>
+
+        <div class="filters">
+            <h3>Filters</h3>
+            
+
+            <div class="filter-group">
+                <label>Job Type</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" value="On-site" v-model="filters.type"> On-site</label>
+                    <label><input type="checkbox" value="Hybrid" v-model="filters.type"> Hybrid</label>
+                    <label><input type="checkbox" value="Remote" v-model="filters.type"> Remote</label>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label>Salary Range (EGP)</label>
+                <div class="checkbox-group" style="display:block;">
+                    <div style="margin-bottom: 10px;">
+                        <span style="color:#555; font-size:0.9rem;">Min: [[ formatCurrency(filters.salaryMin) ]]</span>
+                        <input type="range" min="0" max="100000" step="1000" v-model.number="filters.salaryMin" />
+                    </div>
+                    <div>
+                        <span style="color:#555; font-size:0.9rem;">Max: [[ formatCurrency(filters.salaryMax) ]]</span>
+                        <input type="range" min="0" max="100000" step="1000" v-model.number="filters.salaryMax" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label>City</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" value="Cairo" v-model="filters.city"> Cairo</label>
+                    <label><input type="checkbox" value="Giza" v-model="filters.city"> Giza</label>
+                    <label><input type="checkbox" value="New Cairo" v-model="filters.city"> New Cairo</label>
+                    <label><input type="checkbox" value="Nasr City" v-model="filters.city"> Nasr City</label>
+                    <label><input type="checkbox" value="Maadi" v-model="filters.city"> Maadi</label>
+                    <label><input type="checkbox" value="Sheikh Zayed" v-model="filters.city"> Sheikh Zayed</label>
+                    <label><input type="checkbox" value="10th of Ramadan" v-model="filters.city"> 10th of Ramadan</label>
+                    <label><input type="checkbox" value="6th of October" v-model="filters.city"> 6th of October</label>
+                    <label><input type="checkbox" value="New Administrative Capital" v-model="filters.city"> New Capital</label>
+                </div>
+            </div>
+
+
+            <div class="filter-group">
+                <label>Job Category</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" value="Accountant" v-model="filters.category"> Accounting</label>
+                    <label><input type="checkbox" value="Sales" v-model="filters.category"> Sales</label>
+                    <label><input type="checkbox" value="Development" v-model="filters.category"> Soft. Dev</label>
+                    <label><input type="checkbox" value="Marketing" v-model="filters.category"> Marketing</label>
+                    <label><input type="checkbox" value="Architecture" v-model="filters.category"> Architecture</label>
+                    <label><input type="checkbox" value="Engineer" v-model="filters.category"> Engineering</label>
+                </div>
+            </div>
+        </div>
+        <transition name="modal-fade">
+            <div class="modal-overlay" v-if="showApplyModal" @click.self="closeModal">
+                <div class="modal-card">
+                
+                <div class="modal-header">
+                    <h3>Apply for : <span style="color: var(--primary-color);">[[ selectedJobForApp?.title ]]</span></h3>
+                    <button class="btn-close-modal" @click="closeModal">&times;</button>
+                </div>
+
+                <div class="modal-company-branding">
+                    <img v-if="selectedJobForApp?.logoUrl" 
+                        :src="selectedJobForApp.logoUrl" 
+                        :alt="selectedJobForApp.company" 
+                        class="modal-company-logo">
+                    
+                    <div v-else class="modal-company-text-logo">
+                        [[ selectedJobForApp?.company ]]
+                    </div>
+                    <p class="modal-company-name">at <span style="color: var(--primary-color);">[[ selectedJobForApp?.company ]]</span></p>
+                </div>
+
+                <div class="modal-body">
+                    
+                    <div class="modal-section">
+                        <div class="container">
+                            <div style="font-size: 3rem; color: var(--primary-color); margin-bottom: 0;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                            </div>
+                            <h4 style="margin-top: 0;">Use Existing CV</h4>
+                            <p>Apply instantly using the CV you uploaded when you signed up.</p>
+                            <button class="btn btn-primary" 
+                                    :class="{ 'btn-loading': isApplying }" 
+                                    :disabled="isApplying"
+                                    @click="applyWithExisting">
+                                Apply with Existing CV
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="vertical-divider"></div>
+
+                    <div class="modal-section">
+                        <div>
+                            <div style="font-size: 3rem; color: var(--primary-color); margin-bottom: 15px; margin-bottom: 0;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                            </div>
+                            <h4 style="margin-top: 0;">Upload New CV</h4>
+                            <p>Upload a specific CV tailored for this job application.</p>
+                            
+                            <div class="modal-upload-label">
+                                <input type="file" id="newCv" @change="handleCvUpload" accept=".pdf,.doc,.docx" style="display: none;">
+                                <label for="newCv" class="custom-file-upload" :class="{ 'has-file': newCvName }">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                                    <span>[[ newCvName || 'Choose File...' ]]</span>
+                                </label>
+                            </div>
+
+                            <button class="btn" 
+                                    :class="[newCvName ? 'btn-login-action' : 'btn-primary', { 'btn-loading': isApplying }]" 
+                                    :disabled="!newCvName || isApplying"
+                                    @click="applyWithNew">
+                                Confirm & Apply
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+                </div>
+            </div>
+        </transition>
+        <div v-if="showLoginNotification" class="toast-notification">
+            <div class="toast-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <style>.toast-icon svg { transform: rotate(45deg); }</style> 
+            </div>
+            <span>You need to be logged in to apply!</span>
+        </div>
+        <div v-if="showSuccessNotification" class="toast-notification success">
+            <div class="toast-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            <span>[[ successMessage ]]</span>
+        </div>
+    </div>
+
+    </div>
+
+    <footer class="site-footer">
+        <div class="container footer-layout">
+
+            <div class="footer-info">
+                <h2 class="logo footer-logo">Hired</h2>
+                <p class="footer-desc">
+                    Hired is a reliable job-seeking platform that connects skilled individuals with real career opportunities.<br>
+                    We help candidates explore jobs, apply smoothly, and track progress—making career growth easier, 
+                    faster, and more confident for graduates and professionals alike.
+                </p>
+            </div>
+            <div class="footer-socials">
+                <h3>Follow us!</h3>
+                <div class="social-icons">
+                    <a href="https://facebook.com" class="icon-btn fb">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    </a>
+                    
+                    <a href="https://linkedin.com" class="icon-btn in">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                    </a>
+
+                    <a href="https://instagram.com" class="icon-btn ig">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                    
+                    <a href="https://wa.me/+201098977143" class="icon-btn wa">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487 1.093.472 1.527.494 2.071.393.596-.11 1.758-.718 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>• All Rights Reserved • &copy; 2026 Hired</p>
+        </div>
+    </footer>
+    
+    <script src="../static/js/model.js"></script>
+    <script src="../static/js/browse-jobs.js"></script>
+
+</body>
+</html>
